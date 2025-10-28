@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MusicApp.MainPage"
+             BackgroundColor="#34656D">
+
+    <ScrollView>
+        <StackLayout Padding="5">
+            <HorizontalStackLayout HeightRequest="100" Margin="0, 0, 0, 20">
+                <Image Source="account.png" Aspect="AspectFit" HeightRequest="30" HorizontalOptions="Start" ></Image>
+            <Label Text="Witaj, Kacper" 
+               TextColor="#FAF8F1" 
+               FontFamily="Poppins-Light" 
+               FontSize="22" 
+               VerticalOptions="Center"
+               HorizontalOptions="Center" 
+               FontAttributes="Bold" 
+               Margin="20" />
+            </HorizontalStackLayout>
+            <Label Text="Ostatnio słuchane:" 
+                   TextColor="#FAF8F1"
+                   FontFamily="Poppins-Light"
+                   FontSize="22"
+                   Margin="0, 0, 10, 20" />
+            <Grid HeightRequest="60" BackgroundColor="#FAEAB1" Margin="0, 20, 0, 20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Image Source="heart.png"
+                       BackgroundColor="#334443"
+           Grid.Column="0"
+           Aspect="AspectFit"
+           Margin="10"/>
+
+                <Label Text="Polubione utwory"
+           Grid.Column="1"
+           FontFamily="Poppins-Light"
+           VerticalOptions="Center"
+           TextColor="#334443"/>
+            </Grid>
+            <Grid HeightRequest="60" BackgroundColor="#FAEAB1" Margin="0, 20, 0, 20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Image Source="heart.png"
+            BackgroundColor="#334443"
+Grid.Column="0"
+Aspect="AspectFit"
+Margin="10"/>
+
+                <Label Text="Polubione utwory"
+Grid.Column="1"
+FontFamily="Poppins-Light"
+VerticalOptions="Center"
+TextColor="#334443"/>
+            </Grid>
+            <Grid HeightRequest="60" BackgroundColor="#FAEAB1" Margin="0, 20, 0, 20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Image Source="heart.png"
+                       HeightRequest="60"
+                       WidthRequest="100"
+            BackgroundColor="#334443"
+Grid.Column="0"
+Aspect="AspectFit"
+Margin="10"/>
+
+                <Label Text="Polubione utwory"
+Grid.Column="1"
+FontFamily="Poppins-Light"
+VerticalOptions="Center"
+TextColor="#334443"/>
+            </Grid>
+
+        </StackLayout>
+    </ScrollView>
+
+
+
+</ContentPage>
