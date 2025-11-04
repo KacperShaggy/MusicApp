@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Media; // jeśli używasz MediaElementa
+using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Hosting;
 
 namespace MusicApp
 {
@@ -7,20 +10,15 @@ namespace MusicApp
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkitCore()          // ✅ poprawna metoda dla MAUI 8/9
+                .UseMauiCommunityToolkitMediaElement()  // ✅ jeśli chcesz odtwarzać audio/wideo
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                    fonts.AddFont("Poppins-Black.ttf", "Poppins-Black");
-                    fonts.AddFont("Poppins-Light.ttf", "Poppins-Light");
-
                 });
-
-#if DEBUG
-    		builder.Logging.AddDebug();
-#endif
 
             return builder.Build();
         }
