@@ -12,6 +12,7 @@ namespace MusicApp
             var builder = MauiApp.CreateBuilder();
 
             builder
+
                 .UseMauiApp<App>()
                 .UseMauiCommunityToolkitCore()          // ✅ poprawna metoda dla MAUI 8/9
                 .UseMauiCommunityToolkitMediaElement()  // ✅ jeśli chcesz odtwarzać audio/wideo
