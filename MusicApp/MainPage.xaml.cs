@@ -1,86 +1,124 @@
-﻿using CommunityToolkit.Maui.Media;
-using CommunityToolkit.Maui.Views;
-using Microsoft.Maui.Controls;
+﻿using System;
 using System.Collections.ObjectModel;
-using Windows.Media.Core;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Storage;
+using Plugin.Maui.Audio;
 
 namespace MusicApp
 {
     public partial class MainPage : ContentPage
     {
-        private ObservableCollection<string> _songs = new();
-        private MediaElement _player;
-        private int _currentIndex = -1;
+        public ObservableCollection<SongItem> Playlist { get; set; } = new ObservableCollection<SongItem>();
+
+        private int currentIndex = -1;
+        private IAudioPlayer player;
 
         public MainPage()
         {
             InitializeComponent();
-
-            _player = new MediaElement
-            {
-                ShouldShowPlaybackControls = false,
-                IsVisible = false
-            };
-
-            _songs.Add("song1.mp3");
-            _songs.Add("song2.mp3");
-            _songs.Add("song3.mp3");
-
-            SongsCollection.ItemsSource = _songs;
-            ContentLayout.Children.Add(_player); // jeśli masz StackLayout o nazwie ContentLayout
+            PlaylistView.ItemsSource = Playlist;
         }
 
-        private void OnAddSongClicked(object sender, EventArgs e)
+        public class SongItem
         {
-            // Dodawanie pliku z pamięci urządzenia (prosty przykład)
-            _songs.Add($"utwor_{_songs.Count + 1}.mp3");
+            public string FilePath { get; set; }
+            public string FileName { get; set; }
         }
 
-        private void OnSongSelected(object sender, SelectionChangedEventArgs e)
+        private async void AddSongButton_Clicked(object sender, EventArgs e)
         {
-            if (e.CurrentSelection.FirstOrDefault() is string selectedSong)
+            try
             {
-                _currentIndex = _songs.IndexOf(selectedSong);
-                PlayCurrentSong();
+                var customFileType = new FilePickerFileType(new System.Collections.Generic.Dictionary<DevicePlatform, System.Collections.Generic.IEnumerable<string>>
+                {
+                    { DevicePlatform.Android, new[] { "audio/*" } },
+                    { DevicePlatform.iOS, new[] { "public.audio" } },
+                    { DevicePlatform.WinUI, new[] { ".mp3", ".wav", ".m4a" } },
+                    { DevicePlatform.MacCatalyst, new[] { "public.audio" } }
+                });
+
+                var result = await FilePicker.Default.PickAsync(new PickOptions
+                {
+                    PickerTitle = "Wybierz plik audio",
+                    FileTypes = customFileType
+                });
+
+                if (result != null)
+                {
+                    var song = new SongItem
+                    {
+                        FilePath = result.FullPath,
+                        FileName = System.IO.Path.GetFileName(result.FullPath)
+                    };
+
+                    Playlist.Add(song);
+                    currentIndex = Playlist.Count - 1;
+
+                    CurrentSongLabel.Text = song.FileName;
+
+                    player?.Stop();
+                    player = AudioManager.Current.CreatePlayer(song.FilePath);
+                }
             }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Błąd", $"Nie udało się dodać pliku: {ex.Message}", "OK");
+            }
+        }
+
+        private void PlayButton_Clicked(object sender, EventArgs e)
+        {
+            if (player != null && !player.IsPlaying) player.Play();
+        }
+
+        private void PauseButton_Clicked(object sender, EventArgs e)
+        {
+            if (player != null && player.IsPlaying) player.Pause();
+        }
+
+        private void StopButton_Clicked(object sender, EventArgs e)
+        {
+            if (player != null) player.Stop();
+        }
+
+        private void PreviousButton_Clicked(object sender, EventArgs e)
+        {
+            if (Playlist.Count == 0) return;
+
+            currentIndex--;
+            if (currentIndex < 0) currentIndex = Playlist.Count - 1;
+
+            PlayCurrentSong();
+        }
+
+        private void NextButton_Clicked(object sender, EventArgs e)
+        {
+            if (Playlist.Count == 0) return;
+
+            currentIndex++;
+            if (currentIndex >= Playlist.Count) currentIndex = 0;
+
+            PlayCurrentSong();
         }
 
         private void PlayCurrentSong()
         {
-            if (_currentIndex < 0 || _currentIndex >= _songs.Count)
-                return;
+            if (currentIndex < 0 || currentIndex >= Playlist.Count) return;
 
-            string songName = _songs[_currentIndex];
+            var song = Playlist[currentIndex];
+            CurrentSongLabel.Text = song.FileName;
 
-            // Plik powinien być w Resources/Raw/
-            _player.Source = MediaSource.FromFile(songName);
-            _player.Play();
+            player?.Stop();
+            player = AudioManager.Current.CreatePlayer(song.FilePath);
+            player.Play();
         }
 
-        private void OnPlayClicked(object sender, EventArgs e)
+        private void PlaylistView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _player.Play();
-        }
-
-        private void OnPauseClicked(object sender, EventArgs e)
-        {
-            _player.Pause();
-        }
-
-        private void OnPreviousClicked(object sender, EventArgs e)
-        {
-            if (_currentIndex > 0)
+            var selectedSong = e.CurrentSelection.Count > 0 ? e.CurrentSelection[0] as SongItem : null;
+            if (selectedSong != null)
             {
-                _currentIndex--;
-                PlayCurrentSong();
-            }
-        }
-
-        private void OnNextClicked(object sender, EventArgs e)
-        {
-            if (_currentIndex < _songs.Count - 1)
-            {
-                _currentIndex++;
+                currentIndex = Playlist.IndexOf(selectedSong);
                 PlayCurrentSong();
             }
         }

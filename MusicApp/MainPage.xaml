@@ -5,49 +5,47 @@
              BackgroundColor="#34656D">
 
     <ScrollView>
-        <StackLayout Padding="10" Spacing="15">
+        <StackLayout Padding="5" Spacing="20">
 
-            <!-- Nagłówek -->
-            <HorizontalStackLayout HeightRequest="80" VerticalOptions="Start">
-                <Image Source="account.png" Aspect="AspectFit" HeightRequest="50" Margin="10,0,0,0"/>
+            <HorizontalStackLayout HeightRequest="100">
+                <Image Source="account.png" Aspect="AspectFit" HeightRequest="30" Margin="20,0,0,0" HorizontalOptions="Start" />
                 <Label Text="Witaj, Kacper" 
                        TextColor="#FAF8F1" 
                        FontFamily="Poppins-Light" 
-                       FontSize="22"
+                       FontSize="22" 
                        VerticalOptions="Center"
-                       HorizontalOptions="Center"
+                       HorizontalOptions="Center" 
                        FontAttributes="Bold" 
-                       Margin="20,0"/>
-                <Button Text="Dodaj utwór" 
-                        HeightRequest="40" 
-                        WidthRequest="120" 
-                        BackgroundColor="#334433"
-                        Clicked="OnAddSongClicked"/>
+                       Margin="20" />
+                <Button Text="➕" Margin="30,0,0,0" WidthRequest="120" HeightRequest="60" BackgroundColor="#332233" Clicked="AddSongButton_Clicked" HorizontalOptions="End"/>
+            </HorizontalStackLayout>
+            
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Button Text="⏮" WidthRequest="60" Clicked="PreviousButton_Clicked" BackgroundColor="#332233"/>
+                <Button Text="▶️" WidthRequest="60" Clicked="PlayButton_Clicked" BackgroundColor="#332233"/>
+                <Button Text="⏸" WidthRequest="60" Clicked="PauseButton_Clicked" BackgroundColor="#332233"/>
+                <Button Text="⏹" WidthRequest="60" Clicked="StopButton_Clicked" BackgroundColor="#332233"/>
+                <Button Text="⏭" WidthRequest="60" Clicked="NextButton_Clicked" BackgroundColor="#332233"/>
             </HorizontalStackLayout>
 
-            <!-- Lista utworów -->
-            <CollectionView x:Name="SongsCollection"
+            <Grid HeightRequest="60" BackgroundColor="#FAEAB1" Margin="10, 20, 10, 10" Padding="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="Aktualny utwór:"  FontFamily="Poppins-Light"  Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center"/>
+                <Label x:Name="CurrentSongLabel" Text="Brak" Grid.Column="1"   FontFamily="Poppins-Light"   VerticalOptions="Center" HorizontalOptions="Start"/>
+            </Grid>
+
+            <CollectionView x:Name="PlaylistView" Margin="10" HeightRequest="300" BackgroundColor="#FAEAB1"
                             SelectionMode="Single"
-                            SelectionChanged="OnSongSelected"
-                            HeightRequest="300"
-                            BackgroundColor="#FAEAB1"
-                            Margin="10,0">
+                            SelectionChanged="PlaylistView_SelectionChanged">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame Margin="5" Padding="10" CornerRadius="10" BackgroundColor="#FAF8F1">
-                            <Label Text="{Binding}" TextColor="#000" FontSize="18"/>
-                        </Frame>
+                        <Label Text="{Binding FileName}" FontSize="18" Padding="20"/>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
-            <!-- Sterowanie muzyką -->
-            <HorizontalStackLayout Spacing="20" HorizontalOptions="Center" Margin="0,20,0,0">
-                <Button Text="⏮️" Clicked="OnPreviousClicked"/>
-                <Button Text="▶️" Clicked="OnPlayClicked"/>
-                <Button Text="⏸️" Clicked="OnPauseClicked"/>
-                <Button Text="⏭️" Clicked="OnNextClicked"/>
-            </HorizontalStackLayout>
 
         </StackLayout>
     </ScrollView>
