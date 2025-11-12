@@ -5,83 +5,48 @@
              BackgroundColor="#34656D">
 
     <ScrollView>
-        <StackLayout Padding="5">
-            <HorizontalStackLayout HeightRequest="100" Margin="0, 0, 0, 20">
-                <Image Source="account.png" Aspect="AspectFit" HeightRequest="30" HorizontalOptions="Start" ></Image>
-            <Label Text="Witaj, Kacper" 
-               TextColor="#FAF8F1" 
-               FontFamily="Poppins-Light" 
-               FontSize="22" 
-               VerticalOptions="Center"
-               HorizontalOptions="Center" 
-               FontAttributes="Bold" 
-               Margin="20" />
+        <StackLayout Padding="5" Spacing="20">
+
+            <HorizontalStackLayout HeightRequest="100">
+                <Image Source="account.png" Aspect="AspectFit" HeightRequest="30" Margin="20,0,0,0" HorizontalOptions="Start" />
+                <Label Text="Witaj, Kacper" 
+                       TextColor="#FAF8F1" 
+                       FontFamily="Poppins-Light" 
+                       FontSize="22" 
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center" 
+                       FontAttributes="Bold" 
+                       Margin="20" />
+                <Button Text="➕" Margin="30,0,0,0" WidthRequest="120" HeightRequest="60" BackgroundColor="#332233" Clicked="AddSongButton_Clicked" HorizontalOptions="End"/>
             </HorizontalStackLayout>
-            <Label Text="Ostatnio słuchane:" 
-                   TextColor="#FAF8F1"
-                   FontFamily="Poppins-Light"
-                   FontSize="22"
-                   Margin="0, 0, 10, 20" />
-            <Grid HeightRequest="60" BackgroundColor="#FAEAB1" Margin="0, 20, 0, 20">
+            
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Button Text="⏮" WidthRequest="60" Clicked="PreviousButton_Clicked" BackgroundColor="#332233"/>
+                <Button Text="▶️" WidthRequest="60" Clicked="PlayButton_Clicked" BackgroundColor="#332233"/>
+                <Button Text="⏸" WidthRequest="60" Clicked="PauseButton_Clicked" BackgroundColor="#332233"/>
+                <Button Text="⏹" WidthRequest="60" Clicked="StopButton_Clicked" BackgroundColor="#332233"/>
+                <Button Text="⏭" WidthRequest="60" Clicked="NextButton_Clicked" BackgroundColor="#332233"/>
+            </HorizontalStackLayout>
+
+            <Grid HeightRequest="60" BackgroundColor="#FAEAB1" Margin="10, 20, 10, 10" Padding="10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="80"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
-                <Image Source="heart.png"
-                       BackgroundColor="#334443"
-           Grid.Column="0"
-           Aspect="AspectFit"
-           Margin="10"/>
-
-                <Label Text="Polubione utwory"
-           Grid.Column="1"
-           FontFamily="Poppins-Light"
-           VerticalOptions="Center"
-           TextColor="#334443"/>
+                <Label Text="Aktualny utwór:"  FontFamily="Poppins-Light"  Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center"/>
+                <Label x:Name="CurrentSongLabel" Text="Brak" Grid.Column="1"   FontFamily="Poppins-Light"   VerticalOptions="Center" HorizontalOptions="Start"/>
             </Grid>
-            <Grid HeightRequest="60" BackgroundColor="#FAEAB1" Margin="0, 20, 0, 20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
 
-                <Image Source="heart.png"
-            BackgroundColor="#334443"
-Grid.Column="0"
-Aspect="AspectFit"
-Margin="10"/>
-
-                <Label Text="Polubione utwory"
-Grid.Column="1"
-FontFamily="Poppins-Light"
-VerticalOptions="Center"
-TextColor="#334443"/>
-            </Grid>
-            <Grid HeightRequest="60" BackgroundColor="#FAEAB1" Margin="0, 20, 0, 20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <Image Source="heart.png"
-                       HeightRequest="60"
-                       WidthRequest="100"
-            BackgroundColor="#334443"
-Grid.Column="0"
-Aspect="AspectFit"
-Margin="10"/>
-
-                <Label Text="Polubione utwory"
-Grid.Column="1"
-FontFamily="Poppins-Light"
-VerticalOptions="Center"
-TextColor="#334443"/>
-            </Grid>
+            <CollectionView x:Name="PlaylistView" Margin="10" HeightRequest="300" BackgroundColor="#FAEAB1"
+                            SelectionMode="Single"
+                            SelectionChanged="PlaylistView_SelectionChanged">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding FileName}" FontSize="18" Padding="20"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
         </StackLayout>
     </ScrollView>
-
-
-
 </ContentPage>
